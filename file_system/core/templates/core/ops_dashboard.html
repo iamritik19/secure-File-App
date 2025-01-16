@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ops Dashboard</title>
+</head>
+<body>
+    <h1>Welcome, {{ user.username }}! Ops Dashboard</h1>
+
+    <!-- File Upload Form -->
+    <h2>Upload a File</h2>
+    <form action="{% url 'upload_file' %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="file">Choose a file:</label>
+        <!-- File input with file type restriction -->
+        <input type="file" name="file" accept=".pptx, .docx, .xlsx" required><br><br>
+        <button type="submit">Upload</button>
+    </form>
+
+    <h2>Uploaded Files</h2>
+    <table>
+        <tr>
+            <th>File Name</th>
+            <th>Uploaded By</th>
+            <th>Download</th>
+        </tr>
+        {% for file in files %}
+        <tr>
+            <td>{{ file.name }}</td>
+            <td>{{ file.uploaded_by.username }}</td>
+            <!-- Check if user is 'Ops' to disable the button -->
+            {% if user.user_type == 'Ops' %}
+                <td><button disabled>Download (Restricted)</button></td>
+            {% else %}
+                <!-- Provide a download link if the user is not 'Ops' -->
+                <td><a href="{{ file.file.url }}" download><button>Download</button></a></td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </table>
+
+</body>
+</html>

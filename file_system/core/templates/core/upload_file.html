@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload File</title>
+</head>
+<body>
+    <h2>Upload File</h2>
+
+    {% if user.is_authenticated %}
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <label for="file">Choose file to upload:</label>
+            <!-- File input with restriction on accepted file types -->
+            <input type="file" id="file" name="file" accept=".pptx, .docx, .xlsx" required><br><br>
+
+            <button type="submit">Upload</button>
+        </form>
+    {% else %}
+        <p>You must <a href="{% url 'login' %}">login</a> to upload files.</p>
+    {% endif %}
+</body>
+</html>
